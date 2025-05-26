@@ -11,7 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,7 +27,9 @@ import androidx.compose.ui.unit.dp
 import com.example.courses.data.Datasource
 import com.example.courses.model.Information
 import com.example.courses.ui.theme.CoursesTheme
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.ui.unit.sp
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +47,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun InformationApp() {
     InformationList(
@@ -54,11 +56,14 @@ fun InformationApp() {
 
 @Composable
 fun InformationList(informationList: List<Information>, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier
+    ) {
         items(informationList) { information ->
             InformationCard(
                 information = information,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
             )
         }
     }
@@ -66,39 +71,38 @@ fun InformationList(informationList: List<Information>, modifier: Modifier = Mod
 
 @Composable
 fun InformationCard(information: Information, modifier: Modifier = Modifier) {
-    Card(modifier = modifier
-        .fillMaxSize()
-        .fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Card(
+        modifier = modifier
+            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+            .fillMaxSize()
+            .fillMaxWidth()
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                modifier = Modifier
+                modifier = modifier
                     .size(68.dp, 68.dp),
                 painter = painterResource(information.image),
                 contentDescription = stringResource(information.courseName),
             )
-
             Column {
                 Text(
                     text = LocalContext.current.getString(information.courseName),
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
+                    modifier = modifier
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+                    fontSize = 14.sp
                 )
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(R.drawable.baseline_blur_on_24),
                         contentDescription = stringResource(information.courseName),
-                        modifier = Modifier
+                        modifier = modifier
                             .padding(start = 16.dp)
                     )
                     Text(
                         text = LocalContext.current.getString(information.numberOfAssociatedCourses),
-                        modifier = Modifier
-                            .padding(start = 8.dp)
+                        modifier = modifier
+                            .padding(start = 8.dp),
+                        fontSize = 14.sp
                     )
                 }
             }
